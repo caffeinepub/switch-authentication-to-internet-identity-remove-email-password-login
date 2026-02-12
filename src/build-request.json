@@ -1,0 +1,120 @@
+{
+  "kind": "build_request",
+  "title": "Switch authentication to Internet Identity (remove email/password login)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Replace all email/password authentication flows with Internet Identity login/logout, using the existing Internet Identity integration hooks/components provided by the template (without editing any immutable hook files).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "Please redesign the app to use Internet identity instead of email"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The UI has a clear “Sign in with Internet Identity” action and a “Sign out” action.",
+        "No screens, forms, or copy remain that prompt for email, password, or “reset password”.",
+        "Authentication state is reflected in the UI (signed-out users are prompted to sign in; signed-in users can access authenticated areas).",
+        "No changes are made to any paths listed as immutable in SYSTEM_CONTEXT (compose them instead)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update backend identity handling so user accounts are keyed by the caller Principal (Internet Identity), and ensure all authenticated operations use the caller identity rather than an email address.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "Please redesign the app to use Internet identity instead of email"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User records are created/updated/retrieved by caller Principal.",
+        "Backend methods that require authentication reject anonymous callers with a clear error.",
+        "No backend data model relies on email as a unique identifier."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement a post-login onboarding/profile flow that allows a signed-in user to create/update their writer/reader profile fields (display name, bio, and profile picture), stored and fetched by Principal.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "...sharing a profile picture and writing their bio."
+        ]
+      },
+      "acceptanceCriteria": [
+        "After first Internet Identity login, users are prompted to complete required profile fields (at minimum: display name).",
+        "Users can edit their bio and profile picture after onboarding.",
+        "Profile data persists across refresh and re-login and is retrieved by Principal."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Apply a coherent, creative visual theme across the app (colors, typography, spacing, and component styling) appropriate for a writing/reading platform, and ensure consistency across the authentication and profile screens.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-3"
+        ],
+        "quotes": [
+          "An app where writers can write short stories...",
+          "Please redesign the app to use Internet identity instead of email"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Authentication/onboarding/profile pages share a consistent look and feel (layout, typography, and color system).",
+        "Theme avoids a generic default look and is applied consistently to buttons, forms, headers, and cards.",
+        "User-facing text is in English."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add generated static image assets (logo + subtle background/hero illustration) and render them in the app shell and/or sign-in/onboarding screens via frontend static assets (do not serve images from the backend).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-3"
+        ],
+        "quotes": [
+          "An app where writers can write short stories...",
+          "Please redesign the app to use Internet identity instead of email"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are saved under frontend/public/assets/generated and referenced directly by the frontend.",
+        "Images render correctly in the UI (no broken links) and scale well on mobile and desktop.",
+        "No backend endpoints are added for image serving."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Do not edit immutable frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui (compose them instead).",
+    "Use Internet Identity as the only authentication mechanism; do not implement email/password authentication."
+  ],
+  "nonGoals": [
+    "Implementing email-based signup/login, password reset, or email verification.",
+    "Adding third-party authentication providers other than Internet Identity.",
+    "Implementing external databases or off-chain user storage."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimalist logo mark combining a quill pen and an open book, flat vector style, warm neutral palette (logo-quill-book.dim_512x512.png)",
+      "Soft hero/background illustration of a desk with paper, ink, and books, low-contrast, cozy editorial style (auth-hero-illustration.dim_1600x900.png)",
+      "Default circular avatar illustration (simple silhouette), neutral colors (default-avatar.dim_256x256.png)"
+    ],
+    "edits": []
+  }
+}

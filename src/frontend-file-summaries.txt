@@ -1,0 +1,15 @@
+{
+  "frontend/src/App.tsx": "Main application component that orchestrates authentication flow, profile onboarding, and authenticated app state using Internet Identity and React Query.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for fetching and saving the current user's profile with proper cache invalidation.",
+  "frontend/src/hooks/useCurrentUserProfile.ts": "Custom hook that fetches the caller's user profile with proper loading state management to prevent onboarding modal flash.",
+  "frontend/src/hooks/useSaveCurrentUserProfile.ts": "Mutation hook for saving the caller's user profile with automatic query invalidation on success.",
+  "frontend/src/components/auth/InternetIdentitySignIn.tsx": "Reusable sign-in/sign-out button component that manages Internet Identity authentication and clears React Query cache on logout.",
+  "frontend/src/components/auth/SignedOutScreen.tsx": "Landing page for unauthenticated users featuring hero content, feature highlights, and sign-in call-to-action.",
+  "frontend/src/components/layout/AppHeader.tsx": "Application header with logo, branding, user avatar, and authentication controls.",
+  "frontend/src/components/layout/AppShell.tsx": "Shared layout wrapper providing consistent structure, hero background, header, and footer with attribution.",
+  "frontend/src/components/profile/ProfileOnboarding.tsx": "First-time user onboarding form for creating profile with display name, bio, and profile picture upload with progress tracking.",
+  "frontend/src/components/profile/ProfileEditor.tsx": "Profile editing form allowing authenticated users to update their display name, bio, and profile picture.",
+  "frontend/src/components/profile/ProfileAvatar.tsx": "Avatar component that displays user profile picture with fallback to default avatar and initials.",
+  "frontend/src/index.css": "Global styles with warm editorial OKLCH color system optimized for a writing/reading platform with both light and dark modes.",
+  "frontend/tailwind.config.js": "Tailwind configuration with custom serif fonts (Merriweather), extended shadows, and editorial design tokens."
+}

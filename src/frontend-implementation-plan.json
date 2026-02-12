@@ -1,0 +1,147 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Switch authentication to Internet Identity and add profile onboarding UI",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Replace email/password authentication UI with Internet Identity login/logout using existing immutable hooks.",
+      "acceptanceCriteria": [
+        "The UI has a clear “Sign in with Internet Identity” action and a “Sign out” action.",
+        "No screens, forms, or copy remain that prompt for email, password, or “reset password”.",
+        "Authentication state is reflected in the UI (signed-out users are prompted to sign in; signed-in users can access authenticated areas).",
+        "No changes are made to any paths listed as immutable in SYSTEM_CONTEXT (compose them instead)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the app root that composes the immutable Internet Identity and actor hooks to drive authenticated vs signed-out UI. Render a dedicated signed-out view with a single “Sign in with Internet Identity” action and signed-in shell with “Sign out”. Use the authorization component’s frontend guidance for login/logout state management and cache clearing; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/InternetIdentitySignIn.tsx",
+          "operation": "create",
+          "description": "Add a focused sign-in component that uses the immutable useInternetIdentity hook to trigger Internet Identity login and to show logout when authenticated. Clear React Query caches on logout per the authorization component guidance; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/AppHeader.tsx",
+          "operation": "create",
+          "description": "Create an app header that displays branding plus a prominent Internet Identity sign-in/sign-out action (composing InternetIdentitySignIn). Ensure there is no email/password wording anywhere."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add post-login onboarding and profile editing UI for display name, bio, and profile picture using Principal-keyed profile calls.",
+      "acceptanceCriteria": [
+        "After first Internet Identity login, users are prompted to complete required profile fields (at minimum: display name).",
+        "Users can edit their bio and profile picture after onboarding.",
+        "Profile data persists across refresh and re-login and is retrieved by Principal."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Create a React Query hook that composes the immutable useActor hook to fetch getCallerUserProfile and exposes loading/fetched state in a way that avoids onboarding flash (per the authorization component guidance). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useSaveCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Create a mutation hook that composes the immutable useActor hook to call saveCallerUserProfile and updates/invalidates the current profile query on success. Handle authorization failures gracefully per the authorization component guidance; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileOnboarding.tsx",
+          "operation": "create",
+          "description": "Implement an onboarding UI that appears after successful Internet Identity login when getCallerUserProfile returns null and requires at least display name before continuing. Use shadcn-ui components already present in frontend/src/components/ui (compose only; do not edit ui components). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileEditor.tsx",
+          "operation": "create",
+          "description": "Implement a profile editing form (display name, bio, profile picture) for signed-in users. For the profile picture, use the blob-storage ExternalBlob API on the frontend to create an ExternalBlob from selected image bytes and pass it to saveCallerUserProfile; optionally show upload progress via withUploadProgress. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileAvatar.tsx",
+          "operation": "create",
+          "description": "Add an avatar renderer that displays the user’s profile picture when present (using ExternalBlob.getDirectURL()) and falls back to the generated default avatar asset. Use blob-storage frontend guidance for rendering blobs via direct URLs; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire onboarding and profile editing into the authenticated app flow: after login, fetch current profile; if missing/invalid, show ProfileOnboarding; otherwise show the authenticated shell and a route-like view for ProfileEditor (no email/password screens). Use the authorization component guidance for avoiding onboarding modal flash and for cache clearing on logout; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Apply a cohesive writing/reading platform visual theme across authentication and profile experiences.",
+      "acceptanceCriteria": [
+        "Authentication/onboarding/profile pages share a consistent look and feel (layout, typography, and color system).",
+        "Theme avoids a generic default look and is applied consistently to buttons, forms, headers, and cards.",
+        "User-facing text is in English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Add global styling and design tokens (CSS variables used by Tailwind/shadcn theme) for a warm, cozy editorial aesthetic (paper-like background, ink-like foreground, tasteful accent). Ensure consistent typography/spacing and English-only copy styling for auth/onboarding/profile screens."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Refine Tailwind theme extensions (e.g., font stacks, radii, shadows) to support the writing/reading visual theme consistently across headers, cards, buttons, and forms."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create a shared layout wrapper used by signed-out and signed-in screens to enforce consistent spacing, responsive max-width, and background treatment (including the hero illustration)."
+        },
+        {
+          "path": "frontend/src/components/auth/SignedOutScreen.tsx",
+          "operation": "create",
+          "description": "Create a themed signed-out screen that uses AppShell and shadcn-ui composed components for a polished sign-in experience (no email/password fields). Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add generated static image assets and render them in the app shell and sign-in/onboarding screens via frontend static assets.",
+      "acceptanceCriteria": [
+        "Generated images are saved under frontend/public/assets/generated and referenced directly by the frontend.",
+        "Images render correctly in the UI (no broken links) and scale well on mobile and desktop.",
+        "No backend endpoints are added for image serving."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/logo-quill-book.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated minimalist logo mark image asset at the exact required path for direct frontend usage."
+        },
+        {
+          "path": "frontend/public/assets/generated/auth-hero-illustration.dim_1600x900.png",
+          "operation": "create",
+          "description": "Add the generated soft hero/background illustration asset at the exact required path for direct frontend usage."
+        },
+        {
+          "path": "frontend/public/assets/generated/default-avatar.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated default circular avatar illustration at the exact required path for direct frontend usage."
+        },
+        {
+          "path": "frontend/src/components/layout/AppHeader.tsx",
+          "operation": "modify",
+          "description": "Render the generated logo image from frontend/public/assets/generated/logo-quill-book.dim_512x512.png in the header and ensure it scales appropriately across breakpoints."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "modify",
+          "description": "Render the generated hero/background illustration from frontend/public/assets/generated/auth-hero-illustration.dim_1600x900.png within the signed-out/auth shell and ensure responsive scaling/cropping."
+        },
+        {
+          "path": "frontend/src/components/profile/ProfileAvatar.tsx",
+          "operation": "modify",
+          "description": "Use the generated default avatar image from frontend/public/assets/generated/default-avatar.dim_256x256.png as the fallback when the user has no uploaded profile picture."
+        }
+      ]
+    }
+  ]
+}

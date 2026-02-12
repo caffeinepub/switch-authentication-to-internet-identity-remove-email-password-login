@@ -1,0 +1,97 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-replace-all-email-password-authentication-flows-with-internet-identity-login-logout-using-the-existing-internet-identity-integration-hooks-components-provided-by-the-template-without-editing-any-immutable-hook-files",
+      "featureTitle": "Replace all email/password authentication flows with Internet Identity login/logout, using the existing Internet Identity integration hooks/components provided by the template (without editing any immutable hook files).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/auth/InternetIdentitySignIn.tsx",
+        "frontend/src/components/layout/AppHeader.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-post-login-onboarding-profile-flow-that-allows-a-signed-in-user-to-create-update-their-writer-reader-profile-fields-display-name-bio-and-profile-picture-stored-and-fetched-by-principal",
+      "featureTitle": "Implement a post-login onboarding/profile flow that allows a signed-in user to create/update their writer/reader profile fields (display name, bio, and profile picture), stored and fetched by Principal.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/profile/ProfileAvatar.tsx",
+        "frontend/src/components/profile/ProfileEditor.tsx",
+        "frontend/src/components/profile/ProfileOnboarding.tsx",
+        "frontend/src/hooks/useCurrentUserProfile.ts",
+        "frontend/src/hooks/useSaveCurrentUserProfile.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-creative-visual-theme-across-the-app-colors-typography-spacing-and-component-styling-appropriate-for-a-writing-reading-platform-and-ensure-consistency-across-the-authentication-and-profile-screens",
+      "featureTitle": "Apply a coherent, creative visual theme across the app (colors, typography, spacing, and component styling) appropriate for a writing/reading platform, and ensure consistency across the authentication and profile screens.",
+      "files": [
+        "frontend/src/components/auth/SignedOutScreen.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-generated-static-image-assets-logo-subtle-background-hero-illustration-and-render-them-in-the-app-shell-and-or-sign-in-onboarding-screens-via-frontend-static-assets-do-not-serve-images-from-the-backend",
+      "featureTitle": "Add generated static image assets (logo + subtle background/hero illustration) and render them in the app shell and/or sign-in/onboarding screens via frontend static assets (do not serve images from the backend).",
+      "files": [
+        "frontend/src/components/layout/AppHeader.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/components/profile/ProfileAvatar.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

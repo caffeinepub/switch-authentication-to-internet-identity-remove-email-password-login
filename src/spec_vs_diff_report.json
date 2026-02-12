@@ -1,0 +1,76 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-12T02:27:38.080Z",
+  "summary": "Core Internet Identity sign-in/out UI and a Principal-keyed profile backend/onboarding flow were added. However, the diff appears to modify/add files that were explicitly marked immutable, and there is no direct evidence that the required generated image assets were added under the specified public path.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Do not make changes to immutable frontend paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
+      "reason": "The diff shows these immutable paths being added/changed (they appear in the added files list), which violates the constraint/AC that they must not be edited.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/hooks/useInternetIdentity.ts",
+        "frontend/src/main.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Generated images are saved under frontend/public/assets/generated and referenced directly by the frontend.",
+      "reason": "Frontend components reference images under /assets/generated, but the diff does not show any files added under frontend/public/assets/generated (the omitted files are unspecified, so asset presence cannot be confirmed from the provided diff summary).",
+      "evidence": [
+        "frontend/src/components/auth/SignedOutScreen.tsx",
+        "frontend/src/components/layout/AppHeader.tsx",
+        "frontend/src/components/layout/AppShell.tsx",
+        "frontend/src/components/profile/ProfileAvatar.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Admin/access-control secret token initialization via URL parameter (caffeineAdminToken) and access control initialization on actor creation.",
+      "reason": "BuildRequest focuses on switching auth to Internet Identity and adding Principal-keyed profiles; it does not request an admin-token URL parameter flow or access-control secret initialization behavior.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/utils/urlParams.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Blob storage mixin integration for handling profile pictures (ExternalBlob/Storage mixins).",
+      "reason": "REQ-3 requires a profile picture field, but the specific addition of blob-storage mixins and ExternalBlob upload-progress plumbing is not explicitly requested in the BuildRequest (it may be a valid implementation choice, but it is additional scope beyond the stated requirements).",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/components/profile/ProfileOnboarding.tsx",
+        "frontend/src/components/profile/ProfileEditor.tsx",
+        "frontend/src/components/profile/ProfileAvatar.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.62,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/InternetIdentitySignIn.tsx",
+    "frontend/src/components/auth/SignedOutScreen.tsx",
+    "frontend/src/components/layout/AppHeader.tsx",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/components/profile/ProfileAvatar.tsx",
+    "frontend/src/components/profile/ProfileEditor.tsx",
+    "frontend/src/components/profile/ProfileOnboarding.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useCurrentUserProfile.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/hooks/useSaveCurrentUserProfile.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
